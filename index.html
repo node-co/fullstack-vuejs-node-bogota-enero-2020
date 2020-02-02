@@ -1,0 +1,43 @@
+<html>
+
+<head>
+  <title>hola</title>
+</head>
+
+<body>
+  <h1>hola soy un h1</h1>
+  <div>
+    <form id="formulario">
+      <input type="text" name="nombre" id="nombre" />
+      <input type="submit" />
+    </form>
+  </div>
+  <script>
+    const nombre = document.getElementById('nombre')
+    function mandarDatos(evento) {
+      evento.preventDefault();
+      const datos = {
+        nombre: nombre.value
+      }
+      fetch('http://localhost:3000', {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datos),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+    const formulario = document.getElementById('formulario')
+    formulario.onsubmit = mandarDatos
+
+  </script>
+</body>
+
+</html>

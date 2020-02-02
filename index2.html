@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Vuejs</title>
+</head>
+
+<body>
+  <div id="app">
+    <form v-on:submit.prevent>
+      <input name="nombre" id="nombre" type="text" v-model="datos.nombre" />
+      <input type="submit" value="enviar" v-on:click="enviar" />
+      <ul>
+        <li v-for="usuario in usuarios">{{usuario.nombre}}</li>
+      </ul>
+    </form>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        datos: {
+          nombre: ''
+        },
+        usuarios: []
+      },
+      methods: {
+        enviar() {
+          fetch('http://localhost:3000/personas', {
+            method: 'POST', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.datos),
+            mode: 'cors'
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              this.listar()
+              console.log('Success:', data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        },
+        listar() {
+          fetch('http://localhost:3000/personas', {
+            method: 'GET', // or 'PUT'
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          })
+            .then((response) => response.json())
+            .then((usuarios) => {
+              this.usuarios = usuarios;
+              console.log('Success:', data);
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+        },
+      },
+      mounted() {
+        this.listar()
+      }
+    })
+  </script>
+</body>
+
+</html>
